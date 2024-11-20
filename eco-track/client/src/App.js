@@ -8,10 +8,6 @@ function App() {
     return (
         <Router>
             <div>
-                <nav>
-                    <Link to="/login">Logout</Link>
-                </nav>
-
                 <Routes>
                     <Route path="/" element={<Login />} />  {/* Default route set to Login */}
                     <Route path="/login" element={<Login />} />

@@ -1,41 +1,32 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { fetchLogin, handleLoginResponse } from './loginHandler';  // Import functions from loginHandler.js
+import { BrowserRouter as Link} from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate(); // React Router hook for navigation
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Clear any previous error messages
-    console.log("Submitting login with:", { email, password }); // For debugging
 
-    try {
-      // Send login data to the server
-      const response = await fetch('http://localhost:8080/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',  // Send cookies with request if needed
-        body: JSON.stringify({ email, password }),
-      });
+    // Call the fetchLogin function from loginHandler.js
+    const response = await fetchLogin(email, password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || 'Login failed. Please try again.');
-      } else {
-        console.log("Login successful:", data);
-        setSuccess('Login successful! Redirecting...');
-        // Redirect logic (using useNavigate or window.location)
-        setTimeout(() => {
-          // You can use `useNavigate()` if you're using React Router, or:
-          window.location.href = '/Wasteform'; // Redirect to the dashboard (example)
-        }, 1500);
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('An unexpected error occurred');
+    // Use the handleLoginResponse to show success or failure
+    const message = handleLoginResponse(response);
+    
+    if (response.success) {
+      setSuccess(message);  // Show success message
+      setError(''); // Clear any previous errors
+      setTimeout(() => navigate('/wasteform'), 1000); // Redirect after 2 seconds
+    } else {
+      setError(message);  // Show error message
+      setSuccess(''); // Clear any previous success messages
     }
   };
 

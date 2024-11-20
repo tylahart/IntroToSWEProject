@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 // Create a schema for the User model
