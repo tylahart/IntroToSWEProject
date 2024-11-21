@@ -124,8 +124,8 @@ app.delete('/logout', (req, res) => {
 // Middleware functions to check if the user is authenticated or not
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-      // If the user is already authenticated, redirect them to wasteform (or another page)
-      return res.redirect('/wasteform');
+      // If the user is already authenticated, redirect them to home (or another page)
+      return res.redirect('/home');
     }
     next(); // Proceed to the login page if not authenticated
   }

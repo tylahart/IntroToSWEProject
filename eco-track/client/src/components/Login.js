@@ -23,9 +23,9 @@ const Login = () => {
     if (response.success) {
       setSuccess(message);  // Show success message
       setError(''); // Clear any previous errors
-      setTimeout(() => navigate('/wasteform'), 1000); // Redirect after 2 seconds
+      setTimeout(() => navigate('/home'), 1000); // Redirect after 2 seconds
     } else {
-      setError(message);  // Show error message
+      setError('Email or password is incorrect');  // Show error message
       setSuccess(''); // Clear any previous success messages
     }
   };
