@@ -42,7 +42,7 @@ const WasteForm = () => {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="Item Count"
+                placeholder="How Many?"
                 required
             />
             <button type="submit">Upload</button>
