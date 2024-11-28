@@ -2,25 +2,49 @@ import React, { useState } from 'react';
 import { uploadWasteData } from '../api/wasteService';
 
 const WasteForm = () => {
-    const [user, setUser] = useState('');
     const [wasteType, setWasteType] = useState('');
     const [amount, setAmount] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            await uploadWasteData({ user, wasteType, amount });
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                alert('You must be logged in to upload waste data.');
+                return;
+            }
+
+            console.log('Token found:', token);
+
+            await uploadWasteData({ wasteType, amount });
+
             alert("Waste data uploaded successfully!");
+            // Reset form on success
+            setWasteType('');
+            setAmount('');
         } catch (error) {
-            alert("Failed to upload data.");
+            console.error('Error during waste data upload:', error.response?.data || error.message);
+            alert(`Failed to upload data: ${error.response?.data?.message || error.message}`);
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" value={user} onChange={(e) => setUser(e.target.value)} placeholder="User" required />
-            <input type="text" value={wasteType} onChange={(e) => setWasteType(e.target.value)} placeholder="Waste Type" required />
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" required />
+            <input
+                type="text"
+                value={wasteType}
+                onChange={(e) => setWasteType(e.target.value)}
+                placeholder="Waste Type"
+                required
+            />
+            <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Item Count"
+                required
+            />
             <button type="submit">Upload</button>
         </form>
     );
