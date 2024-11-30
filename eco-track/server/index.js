@@ -89,6 +89,7 @@ app.post('/token', (req, res) => {
   });
 });
 
+//logout route
 app.delete('/logout', (req, res) => {
   refreshTokens = refreshTokens.filter(token => token !== req.body.token);
   res.sendStatus(204);
@@ -140,6 +141,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
     res.status(400).json({ message: 'Registration failed', error: error.message });
   }
 });
+
 
 // Mount waste routes
 app.use('/api', wasteRoutes); // Moved after app initialization
