@@ -70,4 +70,8 @@ const WasteBreakdown = () => {
   );
 };
 
+<<<<<<< HEAD
 export default WasteBreakdown;
+=======
+export default WasteBreakdown;
+>>>>>>> 62ff57876bbaf5991b0d72232a8317c49ea3ca57

@@ -39,4 +39,8 @@ const DetailedWastePage = () => {
   );
 };
 
+<<<<<<< HEAD
 export default DetailedWastePage;
+=======
+export default DetailedWastePage;
+>>>>>>> 62ff57876bbaf5991b0d72232a8317c49ea3ca57
