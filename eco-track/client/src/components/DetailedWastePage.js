@@ -4,19 +4,30 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 const wasteData = {
-  plastic: {
-    title: "Plastic Waste",
-    description: "Plastic waste includes items like bottles, bags, and packaging.",
-    impact: "Takes hundreds of years to decompose and is harmful to wildlife.",
-    tips: "Reduce plastic usage by using reusable bags, bottles, and containers."
-  },
   organic: {
     title: "Organic Waste",
     description: "Organic waste includes food scraps, yard waste, and other biodegradable materials.",
     impact: "Emits methane gas as it decomposes in landfills, contributing to greenhouse gases.",
     tips: "Compost organic waste to reduce methane emissions and create useful soil."
   },
-  // will add more waste types as needed
+  recyclable: {
+    title: "Recyclable",
+    description: "Recyclable waste includes items like bottles, bags, paper, and packaging.",
+    impact: "Takes hundreds of years to decompose and is harmful to wildlife.",
+    tips: "Reduce plastic usage by using reusable bags, bottles, and containers."
+  },
+  nonrecyclable: {
+    title: "Non-Recyclable",
+    description: "Non-recyclable waste includes items like food wrappers, polystyrene foam, and certain coated materials that cannot be processed for recycling.",
+    impact: "Ends up in landfills, contributing to pollution and greenhouse gas emissions during decomposition.",
+    tips: "Minimize waste by choosing products with minimal or recyclable packaging and opting for reusable alternatives."
+  },
+  hazardous: {
+    title: "Hazardous",
+    description: "Plastic waste includes items like bottles, bags, and packaging.",
+    impact: "Takes hundreds of years to decompose and is harmful to wildlife.",
+    tips: "Reduce plastic usage by using reusable bags, bottles, and containers."
+  }
 };
 
 const DetailedWastePage = () => {

@@ -1,3 +1,5 @@
+// File: eco-track/client/src/App.js
+
 import React from 'react';
 import WasteForm from './components/WasteForm'; // Adjust path if necessary
 import Login from './components/Login';
