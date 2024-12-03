@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { uploadWasteData } from '../api/wasteService';
 
 const WasteForm = () => {
-    const [user, setUser] = useState('');
     const [wasteType, setWasteType] = useState('');
     const [amount, setAmount] = useState('');
 
@@ -18,10 +17,9 @@ const WasteForm = () => {
 
             console.log('Token found:', token);
 
-            await uploadWasteData({ user, wasteType, amount });
+            await uploadWasteData({ wasteType, amount });
 
             alert('Waste data uploaded successfully!');
-            setUser('');
             setWasteType('');
             setAmount('');
         } catch (error) {
@@ -53,13 +51,6 @@ const WasteForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-                placeholder="User"
-                required
-            />
             <select
                 value={wasteType}
                 onChange={(e) => setWasteType(e.target.value)}
