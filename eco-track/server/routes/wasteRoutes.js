@@ -73,34 +73,22 @@ router.get('/waste/amount', authenticateToken, async (req, res) => {
     }
 });
 
-
-// Route to get the total weight of waste for a user
-router.get('/waste/weight', authenticateToken, async (req, res) => {
+router.get('/waste/output', authenticateToken, async (req, res) => {
     try {
         // Fetch all waste entries for the user
         const entries = await WasteEntry.find({ userId: req.user.userId });
 
-        // Calculate the total weight
-        const totalWeight = entries.reduce((sum, entry) => sum + entry.weight, 0);
+        // Calculate the waste output: sum of (amount * weight)
+        const wasteOutput = entries.reduce((sum, entry) => {
+            const itemOutput = entry.amount * entry.weight; // Calculate for each item
+            return sum + itemOutput; // Add to the running total
+        }, 0);
 
-        res.status(200).json({ totalWeight });
+        // Return only the waste output
+        res.status(200).json({ wasteOutput });
     } catch (error) {
-        console.error('Error fetching total weight:', error);
-        res.status(500).json({ message: 'Failed to fetch total weight' });
-    }
-});
-
-// Route to get the types of waste for a user
-router.get('/waste/types', authenticateToken, async (req, res) => {
-    try {
-        const wasteTypes = await WasteEntry.find(
-            { userId: req.user.userId }, // Match directly by userId (string)
-            { type: 1, _id: 0 } // Only include the type field
-        );
-        res.status(200).json({ wasteTypes: wasteTypes.map(entry => entry.type) });
-    } catch (error) {
-        console.error('Error fetching waste types:', error);
-        res.status(500).json({ message: 'Failed to fetch waste types' });
+        console.error('Error calculating waste output:', error);
+        res.status(500).json({ message: 'Failed to calculate waste output' });
     }
 });
 
