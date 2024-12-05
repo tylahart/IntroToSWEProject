@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import WasteForm from './components/WasteForm';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
 import WasteBreakdown from './components/WasteBreakdown';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -19,7 +19,6 @@ function App() {
         setDailyGoal(value === '' ? '' : Number(value)); // Allow empty input
     };
 
-    // Fetch waste output from the backend
     const fetchProgress = async () => {
         try {
             const token = localStorage.getItem('accessToken');
@@ -34,10 +33,9 @@ function App() {
         }
     };
 
-    // Use polling to periodically fetch progress
     useEffect(() => {
         fetchProgress(); // Initial fetch
-        const intervalId = setInterval(fetchProgress, 5000); // Fetch every 5 seconds
+        const intervalId = setInterval(fetchProgress, 1000); // Fetch every 5 seconds
 
         return () => clearInterval(intervalId); // Cleanup on unmount
     }, []); // Run once on component mount
@@ -45,9 +43,17 @@ function App() {
     const blueProgress = Math.min(progress, dailyGoal);
     const redProgress = Math.max(0, progress - dailyGoal);
 
+    // Custom hook to conditionally render Navbar
+    const ShowNavbar = () => {
+        const location = useLocation();
+        const hideNavbarRoutes = ['/', '/login'];
+
+        return !hideNavbarRoutes.includes(location.pathname) && <Navbar />;
+    };
+
     return (
         <Router>
-            <Navbar />
+            <ShowNavbar />
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/login" element={<Login />} />

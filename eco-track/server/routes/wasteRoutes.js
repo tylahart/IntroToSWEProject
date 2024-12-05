@@ -88,8 +88,25 @@ router.get('/waste/breakdown', authenticateToken, async (req, res) => {
 
 router.get('/waste/output', authenticateToken, async (req, res) => {
     try {
-        // Fetch all waste entries for the user
-        const entries = await WasteEntry.find({ userId: req.user.userId });
+        // Get the current date and set time to 00:00:00 for filtering
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+
+        // Debug logs for date range
+        console.log('Start of Day:', startOfDay);
+        console.log('End of Day:', endOfDay);
+
+        // Fetch waste entries for the user within the current day
+        const entries = await WasteEntry.find({
+            userId: req.user.userId,
+            date: { $gte: startOfDay, $lte: endOfDay },
+        });
+
+        // Debug log for filtered entries
+        console.log('Filtered Entries:', entries);
 
         // Calculate the waste output: sum of (amount * weight)
         const wasteOutput = entries.reduce((sum, entry) => {
@@ -97,7 +114,7 @@ router.get('/waste/output', authenticateToken, async (req, res) => {
             return sum + itemOutput; // Add to the running total
         }, 0);
 
-        // Return only the waste output
+        // Return only the waste output for the current day
         res.status(200).json({ wasteOutput });
     } catch (error) {
         console.error('Error calculating waste output:', error);
