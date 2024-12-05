@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import axios from 'axios';
+import { wasteData as detailedWasteData } from './DetailedWastePage';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const normalizeName = (name) => name.toLowerCase().replace(/[-\s]/g, '');
 
 const WasteBreakdown = () => {
   const [wasteData, setWasteData] = useState([]);
@@ -11,18 +14,16 @@ const WasteBreakdown = () => {
   useEffect(() => {
     const getWasteData = async () => {
       try {
-        // Fetch data from the backend (adjust the endpoint if necessary)
-        const token = localStorage.getItem('accessToken'); // Use the user's token for authentication
+        const token = localStorage.getItem('accessToken');
         const response = await axios.get('http://localhost:8080/api/waste/breakdown', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        // Transform the fetched data into the required format for the chart
         const transformedData = response.data.map((type) => ({
-          name: type.type, // Type of waste
-          value: type.totalWeight, // Aggregate weight for this type
+          name: normalizeName(type.type), // Normalize names for matching
+          value: type.totalWeight,
         }));
 
         setWasteData(transformedData);
@@ -36,12 +37,8 @@ const WasteBreakdown = () => {
     getWasteData();
   }, []);
 
-  // Show loading state while fetching data
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
-  // Check if there is no data to display
   if (!wasteData || wasteData.length === 0) {
     return <div>No waste data available to display.</div>;
   }
@@ -50,8 +47,7 @@ const WasteBreakdown = () => {
     <div>
       <h1>Waste Breakdown</h1>
 
-      {/* Pie Chart */}
-      <PieChart width={400} height={400}>
+      <PieChart width={900} height={400}>
         <Pie
           data={wasteData}
           cx="50%"
@@ -69,14 +65,24 @@ const WasteBreakdown = () => {
         <Legend />
       </PieChart>
 
-      {/* Waste Cards with Numerical Amounts */}
       <div className="waste-cards">
-        {wasteData.map((waste, index) => (
-          <div key={index} className="waste-card">
-            <h2>{waste.name}</h2>
-            <p>{`Disposed: ${waste.value} grams`}</p>
-          </div>
-        ))}
+        {wasteData.map((waste, index) => {
+          const wasteInfo = detailedWasteData[waste.name] || {
+            description: 'No description available.',
+            impact: 'No impact data available.',
+            tips: 'No tips available.',
+          };
+
+          return (
+            <div key={index} className="waste-card">
+              <h2>{detailedWasteData[waste.name]?.title || waste.name}</h2>
+              <p>{`Disposed: ${waste.value} grams`}</p>
+              <p>Description: {wasteInfo.description}</p>
+              <p>Impact: {wasteInfo.impact}</p>
+              <p>Tips: {wasteInfo.tips}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
