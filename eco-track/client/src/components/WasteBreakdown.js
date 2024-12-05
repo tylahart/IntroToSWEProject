@@ -74,7 +74,7 @@ const WasteBreakdown = () => {
         {wasteData.map((waste, index) => (
           <div key={index} className="waste-card">
             <h2>{waste.name}</h2>
-            <p>{`Disposed: ${waste.value} kg`}</p>
+            <p>{`Disposed: ${waste.value} grams`}</p>
           </div>
         ))}
       </div>

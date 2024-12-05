@@ -119,6 +119,7 @@ router.post('/addWaste', authenticateToken, async (req, res) => {
             return res.status(401).json({ message: 'User authentication failed.' });
         }
 
+        // Save the new waste entry
         const wasteEntry = new WasteEntry({
             wasteType,
             amount,
@@ -128,11 +129,24 @@ router.post('/addWaste', authenticateToken, async (req, res) => {
         });
 
         const savedEntry = await wasteEntry.save();
-        res.status(201).json(savedEntry);
+
+        // Calculate the updated waste output for the user
+        const entries = await WasteEntry.find({ userId: req.user.userId });
+        const updatedWasteOutput = entries.reduce((sum, entry) => {
+            const itemOutput = entry.amount * entry.weight; // Calculate for each item
+            return sum + itemOutput; // Add to the running total
+        }, 0);
+
+        res.status(201).json({
+            message: 'Waste entry added successfully.',
+            savedEntry,
+            updatedWasteOutput, // Include the updated waste output in the response
+        });
     } catch (error) {
         console.error('Error saving waste entry:', error);
         res.status(500).json({ message: 'Failed to save waste entry', error: error.message });
     }
 });
+
 
 module.exports = router;

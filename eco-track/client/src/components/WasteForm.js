@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { uploadWasteData } from '../api/wasteService';
 import axios from 'axios';
+import { uploadWasteData } from '../api/wasteService';
 
-const WasteForm = () => {
+
+const WasteForm = ({ onUploadSuccess }) => { // Add `onUploadSuccess` as a prop
     const [wasteType, setWasteType] = useState('');
     const [amount, setAmount] = useState('');
     const [wasteOptions, setWasteOptions] = useState([]);
@@ -47,11 +48,17 @@ const WasteForm = () => {
                 return;
             }
     
+            const numericAmount = parseFloat(amount); // Ensure amount is parsed as a number
+            if (isNaN(numericAmount) || numericAmount <= 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+    
             console.log('Selected Option:', option);
     
             await uploadWasteData({
                 wasteType: option.label,
-                amount,
+                amount: numericAmount,
                 weight: option.weight, // Include weight
                 type: option.type, // Include type
             });
