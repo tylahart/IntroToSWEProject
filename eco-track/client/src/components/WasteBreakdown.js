@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { uploadWasteData } from '../api/wasteService'; // Adjust path if necessary
+import axios from 'axios';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -11,11 +11,23 @@ const WasteBreakdown = () => {
   useEffect(() => {
     const getWasteData = async () => {
       try {
-        const data = await uploadWasteData(); // Call without arguments to trigger GET request
-        console.log("Fetched data:", data); // Log to verify data format
-        setWasteData(data);
+        // Fetch data from the backend (adjust the endpoint if necessary)
+        const token = localStorage.getItem('accessToken'); // Use the user's token for authentication
+        const response = await axios.get('http://localhost:8080/api/waste/breakdown', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Transform the fetched data into the required format for the chart
+        const transformedData = response.data.map((type) => ({
+          name: type.type, // Type of waste
+          value: type.totalWeight, // Aggregate weight for this type
+        }));
+
+        setWasteData(transformedData);
       } catch (error) {
-        console.error("Error loading waste data:", error);
+        console.error('Error loading waste data:', error);
       } finally {
         setLoading(false);
       }
@@ -24,7 +36,7 @@ const WasteBreakdown = () => {
     getWasteData();
   }, []);
 
-  // waiting for the connection 
+  // Show loading state while fetching data
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -47,7 +59,7 @@ const WasteBreakdown = () => {
           outerRadius={150}
           fill="#8884d8"
           dataKey="value"
-          label={(entry) => `${entry.name}: ${entry.value} kg`}
+          label={(entry) => `${entry.name}: ${entry.value} grams`}
         >
           {wasteData.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

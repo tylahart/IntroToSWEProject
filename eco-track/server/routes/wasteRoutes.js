@@ -57,21 +57,34 @@ router.get('/debug', authenticateToken, async (req, res) => {
     }
 });
 
-// Route to get the total amount of waste for a user
-router.get('/waste/amount', authenticateToken, async (req, res) => {
+router.get('/waste/breakdown', authenticateToken, async (req, res) => {
+    console.log('Request received at /waste/breakdown');
     try {
-        // Fetch all waste entries for the user
         const entries = await WasteEntry.find({ userId: req.user.userId });
+        console.log('Fetched entries:', entries);
 
-        // Calculate the total amount
-        const totalAmount = entries.reduce((sum, entry) => sum + entry.amount, 0);
+        const breakdown = {};
+        entries.forEach((entry) => {
+            if (breakdown[entry.type]) {
+                breakdown[entry.type] += entry.amount * entry.weight;
+            } else {
+                breakdown[entry.type] = entry.amount * entry.weight;
+            }
+        });
 
-        res.status(200).json({ totalAmount });
+        const result = Object.entries(breakdown).map(([type, totalWeight]) => ({
+            type,
+            totalWeight,
+        }));
+
+        console.log('Calculated breakdown:', result);
+        res.status(200).json(result);
     } catch (error) {
-        console.error('Error fetching total amount:', error);
-        res.status(500).json({ message: 'Failed to fetch total amount' });
+        console.error('Error calculating waste breakdown:', error);
+        res.status(500).json({ message: 'Failed to calculate waste breakdown' });
     }
 });
+
 
 router.get('/waste/output', authenticateToken, async (req, res) => {
     try {
