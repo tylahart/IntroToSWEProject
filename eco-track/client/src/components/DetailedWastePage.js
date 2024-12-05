@@ -3,7 +3,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-const wasteData = {
+export const wasteData = {
   organic: {
     title: "Organic Waste",
     description: "Organic waste includes food scraps, yard waste, and other biodegradable materials.",

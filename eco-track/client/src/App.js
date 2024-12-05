@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import WasteForm from './components/WasteForm';
 import Login from './components/Login';
 import Register from './components/Register';
-import Home from './components/Home';
 import WasteBreakdown from './components/WasteBreakdown';
 import Navbar from './components/Navbar';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
@@ -35,7 +34,7 @@ function App() {
 
     useEffect(() => {
         fetchProgress(); // Initial fetch
-        const intervalId = setInterval(fetchProgress, 1000); // Fetch every 5 seconds
+        const intervalId = setInterval(fetchProgress, 5000); // Fetch every 5 seconds
 
         return () => clearInterval(intervalId); // Cleanup on unmount
     }, []); // Run once on component mount
