@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import WasteForm from './components/WasteForm';
 import Login from './components/Login';
 import Register from './components/Register';
 import WasteBreakdown from './components/WasteBreakdown';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -18,7 +18,6 @@ function App() {
         setDailyGoal(value === '' ? '' : Number(value)); // Allow empty input
     };
 
-    // Fetch waste output from the backend
     const fetchProgress = async () => {
         try {
             const token = localStorage.getItem('accessToken');
@@ -33,7 +32,6 @@ function App() {
         }
     };
 
-    // Use polling to periodically fetch progress
     useEffect(() => {
         fetchProgress(); // Initial fetch
         const intervalId = setInterval(fetchProgress, 5000); // Fetch every 5 seconds
@@ -44,8 +42,17 @@ function App() {
     const blueProgress = Math.min(progress, dailyGoal);
     const redProgress = Math.max(0, progress - dailyGoal);
 
+    // Custom hook to conditionally render Navbar
+    const ShowNavbar = () => {
+        const location = useLocation();
+        const hideNavbarRoutes = ['/', '/login'];
+
+        return !hideNavbarRoutes.includes(location.pathname) && <Navbar />;
+    };
+
     return (
         <Router>
+            <ShowNavbar />
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/login" element={<Login />} />
@@ -53,99 +60,85 @@ function App() {
                 <Route
                     path="/home"
                     element={
-                        <>
-                            <Navbar />
-                            <div>
-                                <h1>Welcome to EcoTrack</h1>
-                                <p>Your personal waste management tracker. Use the navigation bar to explore the app.</p>
-                            </div>
-                        </>
+                        <div>
+                            <h1>Welcome to EcoTrack</h1>
+                            <p>Your personal waste management tracker. Use the navigation bar to explore the app.</p>
+                        </div>
                     }
                 />
                 <Route
                     path="/wasteform"
                     element={
-                        <>
-                            <Navbar />
-                            <div>
-                                <WasteForm onUploadSuccess={fetchProgress} />
-                                <div style={{ marginBottom: '20px' }}>
-                                    <label>
-                                        Set Daily Goal (grams):
-                                        <input
-                                            type="number"
-                                            value={dailyGoal}
-                                            onChange={handleGoalChange}
-                                            min="0"
-                                        />
-                                    </label>
-                                </div>
-                                <div
-                                    style={{
-                                        position: 'relative',
-                                        width: 180,
-                                        height: 180,
-                                        margin: '20px auto',
-                                    }}
-                                >
-                                    <CircularProgressbar
-                                        value={blueProgress}
-                                        maxValue={dailyGoal || 1}
-                                        text={`${blueProgress} / ${dailyGoal || 1} g`}
-                                        strokeWidth={6}
-                                        styles={buildStyles({
-                                            textColor: '#ecf0f1',
-                                            pathColor: '#3e98c7',
-                                            trailColor: '#d6d6d6',
-                                            textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
-                                        })}
+                        <div>
+                            <WasteForm onUploadSuccess={fetchProgress} />
+                            <div style={{ marginBottom: '20px' }}>
+                                <label>
+                                    Set Daily Goal (grams):
+                                    <input
+                                        type="number"
+                                        value={dailyGoal}
+                                        onChange={handleGoalChange}
+                                        min="0"
                                     />
-                                    {redProgress > 0 && (
-                                        <div
-                                            style={{
-                                                position: 'absolute',
-                                                top: 0,
-                                                left: 0,
-                                                width: '100%',
-                                                height: '100%',
-                                            }}
-                                        >
-                                            <CircularProgressbar
-                                                value={redProgress}
-                                                maxValue={progress}
-                                                text={`+${redProgress} g`}
-                                                strokeWidth={6}
-                                                styles={buildStyles({
-                                                    textColor: '#ecf0f1',
-                                                    pathColor: '#ff0000',
-                                                    trailColor: '#d6d6d6',
-                                                    textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
-                                                })}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                                <div style={{ marginTop: '20px' }}>
-                                    <p>National Average: {nationalAverage} g/day</p>
-                                    <p>
-                                        {progress <= nationalAverage
-                                            ? `You are ${nationalAverage - progress} g below the national average.`
-                                            : `You are ${progress - nationalAverage} g above the national average.`}
-                                    </p>
-                                </div>
+                                </label>
                             </div>
-                        </>
+                            <div
+                                style={{
+                                    position: 'relative',
+                                    width: 180,
+                                    height: 180,
+                                    margin: '20px auto',
+                                }}
+                            >
+                                <CircularProgressbar
+                                    value={blueProgress}
+                                    maxValue={dailyGoal || 1}
+                                    text={`${blueProgress} / ${dailyGoal || 1} g`}
+                                    strokeWidth={6}
+                                    styles={buildStyles({
+                                        textColor: '#ecf0f1',
+                                        pathColor: '#3e98c7',
+                                        trailColor: '#d6d6d6',
+                                        textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
+                                    })}
+                                />
+                                {redProgress > 0 && (
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                        }}
+                                    >
+                                        <CircularProgressbar
+                                            value={redProgress}
+                                            maxValue={progress}
+                                            text={`+${redProgress} g`}
+                                            strokeWidth={6}
+                                            styles={buildStyles({
+                                                textColor: '#ecf0f1',
+                                                pathColor: '#ff0000',
+                                                trailColor: '#d6d6d6',
+                                                textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
+                                            })}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            <div style={{ marginTop: '20px' }}>
+                                <p>National Average: {nationalAverage} g/day</p>
+                                <p>
+                                    {progress <= nationalAverage
+                                        ? `You are ${nationalAverage - progress} g below the national average.`
+                                        : `You are ${progress - nationalAverage} g above the national average.`}
+                                </p>
+                            </div>
+                        </div>
                     }
                 />
-                <Route
-                    path="/wastebreakdown"
-                    element={
-                        <>
-                            <Navbar />
-                            <WasteBreakdown />
-                        </>
-                    }
-                />
+                <Route path="/wastebreakdown" element={<WasteBreakdown />} />
             </Routes>
         </Router>
     );
