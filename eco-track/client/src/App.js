@@ -51,97 +51,119 @@ function App() {
     };
 
     return (
+        // Setting up the Router for navigation between different views
         <Router>
-            <ShowNavbar />
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route
-                    path="/home"
-                    element={
-                        <div>
-                            <h1>Welcome to EcoTrack</h1>
-                            <p>Your personal waste management tracker. Use the navigation bar to explore the app.</p>
-                        </div>
-                    }
-                />
-                <Route
-                    path="/wasteform"
-                    element={
-                        <div>
-                            <WasteForm onUploadSuccess={fetchProgress} />
-                            <div style={{ marginBottom: '20px' }}>
-                                <label>
-                                    Set Daily Goal (grams):
-                                    <input
-                                        type="number"
-                                        value={dailyGoal}
-                                        onChange={handleGoalChange}
-                                        min="0"
-                                    />
-                                </label>
-                            </div>
-                            <div
-                                style={{
-                                    position: 'relative',
-                                    width: 180,
-                                    height: 180,
-                                    margin: '20px auto',
-                                }}
-                            >
-                                <CircularProgressbar
-                                    value={blueProgress}
-                                    maxValue={dailyGoal || 1}
-                                    text={`${blueProgress} / ${dailyGoal || 1} g`}
-                                    strokeWidth={6}
-                                    styles={buildStyles({
-                                        textColor: '#ecf0f1',
-                                        pathColor: '#3e98c7',
-                                        trailColor: '#d6d6d6',
-                                        textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
-                                    })}
-                                />
-                                {redProgress > 0 && (
-                                    <div
-                                        style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            width: '100%',
-                                            height: '100%',
-                                        }}
-                                    >
-                                        <CircularProgressbar
-                                            value={redProgress}
-                                            maxValue={progress}
-                                            text={`+${redProgress} g`}
-                                            strokeWidth={6}
-                                            styles={buildStyles({
-                                                textColor: '#ecf0f1',
-                                                pathColor: '#ff0000',
-                                                trailColor: '#d6d6d6',
-                                                textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
-                                            })}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                            <div style={{ marginTop: '20px' }}>
-                                <p>National Average: {nationalAverage} g/day</p>
-                                <p>
-                                    {progress <= nationalAverage
-                                        ? `You are ${nationalAverage - progress} g below the national average.`
-                                        : `You are ${progress - nationalAverage} g above the national average.`}
-                                </p>
-                            </div>
-                        </div>
-                    }
-                />
-                <Route path="/wastebreakdown" element={<WasteBreakdown />} />
-            </Routes>
+          {/* Show the navigation bar on all routes */}
+          <ShowNavbar />
+      
+          {/* Define the routes for the application */}
+          <Routes>
+            {/* Route for the main or login page */}
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            
+            {/* Route for the registration page */}
+            <Route path="/register" element={<Register />} />
+            
+            {/* Route for the home page, with a welcome message */}
+            <Route
+              path="/home"
+              element={
+                <div>
+                  <h1>Welcome to EcoTrack</h1>
+                  <p>Your personal waste management tracker. Use the navigation bar to explore the app.</p>
+                </div>
+              }
+            />
+            
+            {/* Route for the waste tracking form page */}
+            <Route
+              path="/wasteform"
+              element={
+                <div>
+                  {/* Waste form component to upload waste data */}
+                  <WasteForm onUploadSuccess={fetchProgress} />
+                  
+                  {/* Input field to set a daily waste goal */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <label>
+                      Set Daily Goal (grams):
+                      <input
+                        type="number"
+                        value={dailyGoal}
+                        onChange={handleGoalChange}
+                        min="0"
+                      />
+                    </label>
+                  </div>
+                  
+                  {/* Circular progress bar displaying current waste tracking progress */}
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: 180,
+                      height: 180,
+                      margin: '20px auto',
+                    }}
+                  >
+                    <CircularProgressbar
+                      value={blueProgress}
+                      maxValue={dailyGoal || 1}
+                      text={`${blueProgress} / ${dailyGoal || 1} g`}
+                      strokeWidth={6}
+                      styles={buildStyles({
+                        textColor: '#ecf0f1',
+                        pathColor: '#3e98c7', // Blue color for the progress bar
+                        trailColor: '#d6d6d6',
+                        textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
+                      })}
+                    />
+                    
+                    {/* Display a second progress bar if redProgress value is greater than 0 */}
+                    {redProgress > 0 && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      >
+                        <CircularProgressbar
+                          value={redProgress}
+                          maxValue={progress}
+                          text={`+${redProgress} g`} // Displaying the additional waste tracked
+                          strokeWidth={6}
+                          styles={buildStyles({
+                            textColor: '#ecf0f1',
+                            pathColor: '#ff0000', // Red color for the additional progress
+                            trailColor: '#d6d6d6',
+                            textSize: `${Math.min(16, 16 * (180 / 180))}px`, // Dynamically adjust text size
+                          })}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Display information about the national average and comparison with the user's progress */}
+                  <div style={{ marginTop: '20px' }}>
+                    <p>National Average: {nationalAverage} g/day</p>
+                    <p>
+                      {progress <= nationalAverage
+                        ? `You are ${nationalAverage - progress} g below the national average.`
+                        : `You are ${progress - nationalAverage} g above the national average.`}
+                    </p>
+                  </div>
+                </div>
+              }
+            />
+            
+            {/* Route for the waste breakdown page */}
+            <Route path="/wastebreakdown" element={<WasteBreakdown />} />
+          </Routes>
         </Router>
-    );
+      );      
 }
 
 export default App;

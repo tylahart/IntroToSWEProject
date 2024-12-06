@@ -30,15 +30,25 @@ const Navbar = () => {
   };
 
   return (
+    // Define the navigation bar using a <nav> element
     <nav>
       <ul>
+        {/* Link to the home page */}
         <li><Link to="/home">Home</Link></li>
+  
+        {/* Link to the waste form page */}
         <li><Link to="/wasteform">Waste Form</Link></li>
+  
+        {/* Link to the waste breakdown page */}
         <li><Link to="/wastebreakdown">Waste Breakdown</Link></li>
-        <li><button onClick={handleLogout}>Logout</button></li>  {/* Use button for logout in navbar */}
+  
+        {/* Logout button */}
+        <li>
+          <button onClick={handleLogout}>Logout</button>  {/* Trigger the handleLogout function when clicked */}
+        </li>
       </ul>
     </nav>
-  );
+  );  
 };
 
 export default Navbar;

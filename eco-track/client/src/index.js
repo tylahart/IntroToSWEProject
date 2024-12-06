@@ -5,11 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ProgressProvider } from './ProgressContext'; // Import the ProgressProvider
 
+// Create a root element for rendering the React application
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Render the application wrapped in a React.StrictMode component
 root.render(
   <React.StrictMode>
+    {/* Wrap the App component with ProgressProvider to provide global state */}
     <ProgressProvider> 
-      <App />
+      <App /> {/* Render the main App component */}
     </ProgressProvider>
   </React.StrictMode>
 );
