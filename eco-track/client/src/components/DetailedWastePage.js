@@ -3,6 +3,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+// Object containing detailed information about various waste types
 export const wasteData = {
   organic: {
     title: "Organic Waste",
@@ -31,23 +32,31 @@ export const wasteData = {
 };
 
 const DetailedWastePage = () => {
-  const { wasteType } = useParams(); // Access waste type from URL parameter
+  // Retrieve the waste type from the URL parameters using React Router
+  const { wasteType } = useParams();
+
+  // Fetch corresponding waste information from the wasteData object
   const wasteInfo = wasteData[wasteType];
 
+  // Handle cases where the waste type does not exist in the dataset
   if (!wasteInfo) {
     return <h2>Waste type not found.</h2>;
   }
 
+  // Render the detailed page with waste information
   return (
     <div>
-      <h1>{wasteInfo.title}</h1>
-      <p>{wasteInfo.description}</p>
+      <h1>{wasteInfo.title}</h1> {/* Display the title of the waste type */}
+      <p>{wasteInfo.description}</p> {/* Display the description */}
+      
       <h2>Environmental Impact</h2>
-      <p>{wasteInfo.impact}</p>
+      <p>{wasteInfo.impact}</p> {/* Display the environmental impact */}
+      
       <h2>Reduction Tips</h2>
-      <p>{wasteInfo.tips}</p>
+      <p>{wasteInfo.tips}</p> {/* Display tips for waste reduction */}
     </div>
   );
 };
+
 
 export default DetailedWastePage;

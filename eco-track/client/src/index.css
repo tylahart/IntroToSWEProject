@@ -1,13 +1,20 @@
+/* Global body styles */
 body {
-  margin: 0;
+  margin: 0; /* Removes default margin from the body element */
+  /* Sets the font family to a system font stack, which will choose the appropriate font for the user's system */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 
     sans-serif;
-  -webkit-font-smoothing: antialiased;
+
+  /* Ensures smoother font rendering on Apple devices */
+  -webkit-font-smoothing: antialiased; 
+  /* Ensures smoother font rendering on Firefox for macOS */
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Styling for code elements */
 code {
+  /* Specifies a monospace font family for code elements */
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }

@@ -41,38 +41,54 @@ function Register() {
 
   return (
     <div>
+      {/* Heading for the register page */}
       <h1>Register</h1>
+  
+      {/* Display error message if there is an error */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
+  
+      {/* Display success message if registration is successful */}
       {success && <p style={{ color: 'green' }}>{success}</p>}
+  
+      {/* Registration form */}
       <form onSubmit={handleSubmit}>
+        {/* Input field for the user's name */}
         <input
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)} // Update the name state when the user types
           placeholder="Name"
-          required
+          required // Make this field required
         />
+  
+        {/* Input field for the user's email */}
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)} // Update the email state when the user types
           placeholder="Email"
-          required
+          required // Make this field required
         />
+  
+        {/* Input field for the user's password */}
         <input
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)} // Update the password state when the user types
           placeholder="Password"
-          required
+          required // Make this field required
         />
+  
+        {/* Submit button to trigger the form submission */}
         <button type="submit">Register</button>
       </form>
+  
+      {/* Link to the login page for users who already have an account */}
       <p>
         Already have an account? <a href="/login">Login</a>
       </p>
     </div>
-  );
+  );  
 }
 
 export default Register;
