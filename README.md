@@ -1,11 +1,11 @@
 This is a full-stack MERN application for handling user authentication and waste data management.
 
-Prerequisites
+Prerequisites :
 Before running this project, ensure you have the following installed on your machine:
 Node.js (v14.x or later recommended)
 npm (comes with Node.js)
 
-Installation
+Installation :
 1. Clone the repository:
 git clone https://github.com/tylahart/IntroToSWEProject/tree/eco-track-update
 2. Install dependencies:
@@ -25,7 +25,7 @@ npm install passport-local-mongoose@^8.0.0
 npm install recharts@^2.13.3
 
 
-Environment Variables
+Environment Variables :
 1. Create a .env file in the root directory and include the following environment variables:
 MONGO_URI=mongodb+srv://ecoTrack-team:introToSwe@ecotrack-db.eagnz.mongodb.net/;
 SESSION_SECRET= Swe123
