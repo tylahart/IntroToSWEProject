@@ -7,7 +7,7 @@ npm (comes with Node.js)
 
 Installation
 1. Clone the repository:
-git clone <repository-url>
+git clone https://github.com/tylahart/IntroToSWEProject/tree/eco-track-update
 2. Install dependencies:
 npm install
 npm install bcrypt@^5.1.1
@@ -26,7 +26,7 @@ npm install recharts@^2.13.3
 
 
 Environment Variables
-Create a .env file in the root directory and include the following environment variables:
+1. Create a .env file in the root directory and include the following environment variables:
 MONGO_URI=mongodb+srv://ecoTrack-team:introToSwe@ecotrack-db.eagnz.mongodb.net/;
 SESSION_SECRET= Swe123
 JWT_SECRET=fc838d8ea71980fcf16229c1d99854cc7c6f529d01fed625367027ae7870e4a00e7a45d83325213a7843170aa4a115ec7c4cf6afed03e7f2663e29ccc62b8940
