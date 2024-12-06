@@ -1,4 +1,4 @@
-This is a Node.js server for handling user authentication and waste data management using Express, Mongoose, and Passport.js.
+This is a full-stack MERN application for handling user authentication and waste data management.
 
 Prerequisites
 Before running this project, ensure you have the following installed on your machine:
